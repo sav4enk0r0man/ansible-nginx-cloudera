@@ -1,0 +1,8 @@
+---
+  - hosts: servers
+    become: true
+    become_user: root
+    vars:
+      nginx_docker_image: nginx:latest
+    roles:
+      - { role: "{{ playbook_dir }}" }

@@ -1,0 +1,29 @@
+---
+- name: "Create directories"
+  become: true
+  become_user: root
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ nginx_configs }}"
+    - "{{ nginx_log_dir }}"
+    - "{{ nginx_www_root }}"
+    - "{{ nginx_socket }}"
+
+- name: "Copy main config"
+  become: true
+  become_user: root
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_config_dir }}/nginx.conf"
+
+- name: "Copy cloudera services configs"
+  become: true
+  become_user: root
+  template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ nginx_configs }}/{{ item.name }}.conf"
+  with_items:
+    "{{ cloudera_services }}"

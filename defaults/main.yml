@@ -1,0 +1,23 @@
+---
+
+nginx_user: nginx
+nginx_configs: /etc/nginx/conf.d
+nginx_listen: 127.0.0.1
+nginx_port: 80
+nginx_log_dir: /var/log/nginx
+nginx_log_file: "{{ nginx_log_dir }}/error_log"
+nginx_log_level: info
+nginx_worker_process: 6
+nginx_worker_connections: 1024
+nginx_connection_pool_size: 256
+
+nginx_server_name: localhost
+nginx_access_log: "{{ nginx_log_dir }}/localhost.access_log"
+nginx_error_log: "{{ nginx_log_dir }}/localhost.error_log"
+www_index: index.html
+nginx_www_root: /var/www/localhost/htdocs
+
+nginx_docker_image: "nginx:latest"
+nginx_config_dir: /etc/nginx
+nginx_socket: /var/run/app_sock/
+nginx_container_name: nginx

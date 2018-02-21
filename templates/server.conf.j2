@@ -1,0 +1,25 @@
+server {
+
+    listen {{ nginx_port }};
+    listen [::]:{{ nginx_port }};
+
+    server_name {{ item.host }};
+
+    client_max_body_size 1024m;
+    access_log {{ item.log }};
+
+{% for service in cloudera_services %}
+  {% if item.name != service.name %}
+location /{{ service.name }} {
+      rewrite ^.*$ http://{{ service.host }} redirect;
+    }
+
+  {% endif %}
+{% endfor %}
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass {{ item.backend }};
+    }
+
+}

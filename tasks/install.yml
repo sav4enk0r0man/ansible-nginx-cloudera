@@ -1,0 +1,28 @@
+---
+
+- name: "Create systemd service"
+  become: true
+  become_user: root
+  template:
+    src: nginx.service.j2
+    dest: /etc/systemd/system/nginx.service
+
+- name: "Systemd daemon reload"
+  become: true
+  become_user: root
+  shell: |
+    systemctl daemon-reload
+
+- name: "Pull docker image"
+  become: true
+  become_user: root
+  shell: |
+    docker pull {{ nginx_docker_image }}
+
+- name: "Enabled service"
+  become: true
+  become_user: root
+  service:
+    name: nginx
+    enabled: yes
+    state: started

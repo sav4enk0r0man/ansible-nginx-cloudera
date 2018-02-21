@@ -1,0 +1,61 @@
+user {{ nginx_user }} {{ nginx_user }};
+worker_processes {{ nginx_worker_process }};
+
+error_log {{ nginx_log_file }} {{ nginx_log_level}};
+
+events {
+	worker_connections {{ nginx_worker_connections }};
+	use epoll;
+}
+
+http {
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	log_format main
+		'$remote_addr - $remote_user [$time_local] '
+		'"$request" $status $bytes_sent '
+		'"$http_referer" "$http_user_agent" '
+		'"$gzip_ratio"';
+
+	client_header_timeout 10m;
+	client_body_timeout 10m;
+	send_timeout 10m;
+
+	connection_pool_size {{ nginx_connection_pool_size }};
+	client_header_buffer_size 1k;
+	large_client_header_buffers 4 2k;
+	request_pool_size 4k;
+
+	gzip on;
+	gzip_min_length 1100;
+	gzip_buffers 4 8k;
+	gzip_types text/plain;
+
+	output_buffers 1 32k;
+	postpone_output 1460;
+
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+
+	keepalive_timeout 75 20;
+
+	ignore_invalid_headers on;
+
+{% if www_index %}
+	index {{ www_index }};
+{% endif %}
+	include {{ nginx_configs }}/*.conf;
+
+	server {
+		listen {{ nginx_listen }};
+		server_name {{ nginx_server_name }};
+
+		access_log {{ nginx_access_log }} main;
+		error_log {{ nginx_error_log }} info;
+
+		root {{ nginx_www_root }};
+	}
+
+}

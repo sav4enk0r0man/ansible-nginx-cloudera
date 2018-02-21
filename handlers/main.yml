@@ -1,0 +1,13 @@
+---
+
+- name: "Reload service"
+  become: true
+  become_user: root
+  service:
+    name: nginx
+    state: reloaded
+
+- name: "Reload systemd"
+  become: true
+  become_user: root
+  shell: systemctl daemon-reload

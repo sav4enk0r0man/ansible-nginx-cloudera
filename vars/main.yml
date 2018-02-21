@@ -1,0 +1,27 @@
+---
+nginx_server_name: www.vko.me
+cloudera_services:
+  - { name: "server1",
+      host: "server1.cdh.stack.vko.me",
+      backend: "http://10.136.66.125:7180/",
+      log: "{{ nginx_log_dir }}/server1.access.log",
+      template: "server.conf"
+    }
+  - { name: "hbase",
+      host: "hbase.server1.cdh.stack.vko.me",
+      backend: "http://10.136.66.125:60010/",
+      log: "{{ nginx_log_dir }}/hbase.access.log",
+      template: "service.conf"
+    }
+  - { name: "hue",
+      host: "hue.server1.cdh.stack.vko.me",
+      backend: "http://10.136.66.125:8888/",
+      log: "{{ nginx_log_dir }}/hue.access.log",
+      template: "service.conf"
+    }
+  - { name: "yarn",
+      host: "yarn.server1.cdh.stack.vko.me",
+      backend: "http://10.136.66.125:8088/",
+      log: "{{ nginx_log_dir }}/yarn.access.log",
+      template: "service.conf"
+    }

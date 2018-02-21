@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: v0id
+  description: Install nginx in docker for reverse proxy cloudera services
+  min_ansible_version: 2.4
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - 16.04
+
+  categories:
+    - web
+    - http
+    - balancing
+
+dependencies: []
